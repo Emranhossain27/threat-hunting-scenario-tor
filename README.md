@@ -27,19 +27,57 @@ Management thinks some employees might be using the TOR browser to get around se
 
 ### 1. Searched the `DeviceFileEvents` Table
 
-Searched for any file that had the string "tor" in it and discovered what looks like the user "employee" downloaded a TOR installer, did something that resulted in many TOR-related files being copied to the desktop, and the creation of a file called `tor-shopping-list.txt` on the desktop at `2024-11-08T22:27:19.7259964Z`. These events began at `2024-11-08T22:14:48.6065231Z`.
+Searched the DeviceFileEvents table for any file containing the string “tor” and found that the user “labuser” downloaded a Tor installer at 2025-09-01T15:22:11.0849944Z. This activity resulted in multiple Tor-related files being copied to the Desktop and the creation of a file named “tor-shopping-list.txt.” These events began at:
 
-**Query used to locate events:**
+Query locate events: 2025-09-01T15:04:33.521034Z 
 
-```kql
-DeviceFileEvents  
-| where DeviceName == "threat-hunt-lab"  
-| where InitiatingProcessAccountName == "employee"  
-| where FileName contains "tor"  
-| where Timestamp >= datetime(2024-11-08T22:14:48.6065231Z)  
-| order by Timestamp desc  
-| project Timestamp, DeviceName, ActionType, FileName, FolderPath, SHA256, Account = InitiatingProcessAccountName
-```
+DeviceFileEvents
+| where DeviceName =="windows-hunt-10"
+| where InitiatingProcessAccountName =="labuser"
+| where Timestamp > datetime(2025-09-01T15:04:33.521034Z)
+| where FileName contains "tor"
+| order by Timestamp desc
+| project Timestamp,DeviceName,ActionType,FileName,FolderPath, SHA256,
+Account = InitiatingProcessAccountName
+
+______
+
+Search the DeviceProcessEvents table for any ProcessCommandLine that contained the string “tor-browser-windows-x86_64-portable-14.5.6.exe.” Based on the logs returned, At 11:09:40 AM on September 1, 2025, on the Windows machine named windows-hunt-10, the user labuser launched a file named “tor-browser-windows-x86_64-portable-14.5.6.exe”—a standalone, portable version of the Tor Browser. The executable was sitting in the Downloads folder:
+C:\Users\labuser\Downloads\tor-browser-windows-x86_64-portable-14.5.6.exe. The process carried the SHA-256 hash 05866e47786df83847a08358067ea43cf919a4fe7c14b85fc9715ccb459d5e7e.
+
+DeviceProcessEvents
+| where DeviceName =="windows-hunt-10"
+| where ProcessCommandLine contains "tor-browser-windows-x86_64-portable-14.5.6.exe"
+| project Timestamp,DeviceName,AccountName,ActionType,FileName,FolderPath,SHA256,ProcessCommandLine
+
+
+______
+
+
+Searched the DeviceProcessEvents table for any indication that user “labuser” actually opened the tor browser. There was evidence that they did open it at 2025-09-01T15:10:38.3503057Z. There were several other other instances of firefox.exe (Tor) as well as tor.exe spawned afterwards 
+Query used to locate events:
+
+DeviceProcessEvents
+| where DeviceName =="windows-hunt-10"
+| where FileName has_any("tor.exe","firefox.exe","tor-browser.exe")
+| project Timestamp,DeviceName,AccountName,ActionType,FileName,FolderPath,SHA256,ProcessCommandLine
+| order by Timestamp desc
+
+______
+
+Searched the DeviceNetworkEvents table for any indication the Tor browser was used to establish a connection using known Tor ports. On September 1, 2025, at 11:10:56 AM, on the Windows machine windows-hunt-10, the user labuser successfully established a network connection. The process responsible was tor.exe, located deep within the Tor Browser’s directory on the desktop (c:\users\labuser\desktop\tor browser\browser\torbrowser\tor\tor.exe). This connection was made to the remote IP 192.42.113.102 on port 9001—a port commonly associated in Tor network terminology as the ORPort, which is used by Tor relays for onion routing. There were a couple other connections to sites over port 443.
+
+Query used to locate the events:
+
+DeviceNetworkEvents
+| where DeviceName =="windows-hunt-10"
+| where InitiatingProcessAccountName  != "system"
+| where RemotePort in ("9001","9030","9050","9150","9051","9150")
+| project Timestamp,DeviceName, ActionType,RemoteIP,RemotePort,InitiatingProcessAccountName,
+InitiatingProcessFileName,RemoteUrl,InitiatingProcessFolderPath
+| order by Timestamp desc
+
+
 <img width="1212" alt="image" src="https://github.com/user-attachments/assets/71402e84-8767-44f8-908c-1805be31122d">
 
 ---

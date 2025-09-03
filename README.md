@@ -25,7 +25,27 @@ Management thinks some employees might be using the TOR browser to get around se
 
 ## Steps Taken
 
+# TOR Browser Threat Hunt – Case Study
+
+---
+
 ### 1. Searched the `DeviceFileEvents` Table
+
+Searched the `DeviceFileEvents` table for any file containing the string **"tor"** and found that the user **labuser** downloaded a Tor installer at `2025-09-01T15:22:11.0849944Z`.  
+This activity resulted in multiple Tor-related files being copied to the Desktop and the creation of a file named **tor-shopping-list.txt**.  
+These events began at: `2025-09-01T15:04:33.521034Z`.
+
+**Query used:**
+```kql
+DeviceFileEvents
+| where DeviceName =="windows-hunt-10"
+| where InitiatingProcessAccountName =="labuser"
+| where Timestamp > datetime(2025-09-01T15:04:33.521034Z)
+| where FileName contains "tor"
+| order by Timestamp desc
+| project Timestamp,DeviceName,ActionType,FileName,FolderPath,SHA256,
+Account = InitiatingProcessAccountName
+
 
 
 

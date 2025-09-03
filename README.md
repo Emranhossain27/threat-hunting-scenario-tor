@@ -119,7 +119,7 @@ DeviceNetworkEvents
 
 Tor installer downloaded: At 2025‑09‑01T15:22:11 Z, the user labuser downloaded the Tor Browser installer on the device windows-hunt-10.
 Tor Browser executed: Shortly before, at 11:09:40 AM (local time) on September 1, 2025, labuser launched the Tor Browser executable from the Downloads folder.
-Tor-related processes initiated: After installation, several Tor-related processes—such as tor.exe, firefox.exe, and tor-browser.exe—were executed, confirming active Tor Browser usage. Outbound Tor connection observed: At 11:10:56 AM, tor.exe successfully connected to a remote IP over port 9001, a known Tor relay (ORPort), indicating network activity via the Tor network.
+Tor-related processes initiated: After installation, several Tor-related processes—such as tor.exe, firefox.exe, and tor-browser.exe were executed, confirming active Tor Browser usage. Outbound Tor connection observed: At 11:10:56 AM, tor.exe successfully connected to a remote IP over port 9001, a known Tor relay (ORPort), indicating network activity via the Tor network.
 
 ---
 

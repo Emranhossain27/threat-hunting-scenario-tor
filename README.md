@@ -105,61 +105,26 @@ DeviceNetworkEvents
 
 ## Chronological Event Timeline 
 
-### 1. File Download - TOR Installer
+## Event Timeline
 
-- **Timestamp:** `2024-11-08T22:14:48.6065231Z`
-- **Event:** The user "employee" downloaded a file named `tor-browser-windows-x86_64-portable-14.0.1.exe` to the Downloads folder.
-- **Action:** File download detected.
-- **File Path:** `C:\Users\employee\Downloads\tor-browser-windows-x86_64-portable-14.0.1.exe`
+| Time (ISO/Readable)       | Event Description                                                                 |
+|----------------------------|---------------------------------------------------------------------------------|
+| 2025-09-01 11:09:40        | User ran the Tor Browser installer from Downloads (`tor-browser-windows-x86_64-portable-14.5.6.exe`). |
+| 2025-09-01 11:10:56        | `tor.exe` initiated a successful ORPort connection (port 9001) to IP `192.42.113.102`. |
+| 2025-09-01 15:10:38.3503057 | Multiple Tor-related processes (`firefox.exe`, `tor.exe`, etc.) were executed by **labuser**. |
+| 2025-09-01 15:22:11.0849944Z | The Tor installer was downloaded, and Tor-related files appeared on the Desktop, including `tor-shopping-list.txt`. |
 
-### 2. Process Execution - TOR Browser Installation
-
-- **Timestamp:** `2024-11-08T22:16:47.4484567Z`
-- **Event:** The user "employee" executed the file `tor-browser-windows-x86_64-portable-14.0.1.exe` in silent mode, initiating a background installation of the TOR Browser.
-- **Action:** Process creation detected.
-- **Command:** `tor-browser-windows-x86_64-portable-14.0.1.exe /S`
-- **File Path:** `C:\Users\employee\Downloads\tor-browser-windows-x86_64-portable-14.0.1.exe`
-
-### 3. Process Execution - TOR Browser Launch
-
-- **Timestamp:** `2024-11-08T22:17:21.6357935Z`
-- **Event:** User "employee" opened the TOR browser. Subsequent processes associated with TOR browser, such as `firefox.exe` and `tor.exe`, were also created, indicating that the browser launched successfully.
-- **Action:** Process creation of TOR browser-related executables detected.
-- **File Path:** `C:\Users\employee\Desktop\Tor Browser\Browser\TorBrowser\Tor\tor.exe`
-
-### 4. Network Connection - TOR Network
-
-- **Timestamp:** `2024-11-08T22:18:01.1246358Z`
-- **Event:** A network connection to IP `176.198.159.33` on port `9001` by user "employee" was established using `tor.exe`, confirming TOR browser network activity.
-- **Action:** Connection success.
-- **Process:** `tor.exe`
-- **File Path:** `c:\users\employee\desktop\tor browser\browser\torbrowser\tor\tor.exe`
-
-### 5. Additional Network Connections - TOR Browser Activity
-
-- **Timestamps:**
-  - `2024-11-08T22:18:08Z` - Connected to `194.164.169.85` on port `443`.
-  - `2024-11-08T22:18:16Z` - Local connection to `127.0.0.1` on port `9150`.
-- **Event:** Additional TOR network connections were established, indicating ongoing activity by user "employee" through the TOR browser.
-- **Action:** Multiple successful connections detected.
-
-### 6. File Creation - TOR Shopping List
-
-- **Timestamp:** `2024-11-08T22:27:19.7259964Z`
-- **Event:** The user "employee" created a file named `tor-shopping-list.txt` on the desktop, potentially indicating a list or notes related to their TOR browser activities.
-- **Action:** File creation detected.
-- **File Path:** `C:\Users\employee\Desktop\tor-shopping-list.txt`
-
----
 
 ## Summary
 
-The user "employee" on the "threat-hunt-lab" device initiated and completed the installation of the TOR browser. They proceeded to launch the browser, establish connections within the TOR network, and created various files related to TOR on their desktop, including a file named `tor-shopping-list.txt`. This sequence of activities indicates that the user actively installed, configured, and used the TOR browser, likely for anonymous browsing purposes, with possible documentation in the form of the "shopping list" file.
+Tor installer downloaded: At 2025‑09‑01T15:22:11 Z, the user labuser downloaded the Tor Browser installer on the device windows-hunt-10.
+Tor Browser executed: Shortly before, at 11:09:40 AM (local time) on September 1, 2025, labuser launched the Tor Browser executable from the Downloads folder.
+Tor-related processes initiated: After installation, several Tor-related processes—such as tor.exe, firefox.exe, and tor-browser.exe—were executed, confirming active Tor Browser usage. Outbound Tor connection observed: At 11:10:56 AM, tor.exe successfully connected to a remote IP over port 9001, a known Tor relay (ORPort), indicating network activity via the Tor network.
 
 ---
 
 ## Response Taken
 
-TOR usage was confirmed on the endpoint `threat-hunt-lab` by the user `employee`. The device was isolated, and the user's direct manager was notified.
+TOR usage was confirmed on endpoint  windows-hunt-10 by the user labuser. The device was isolated and the user's direct manager was notified.
 
 ---

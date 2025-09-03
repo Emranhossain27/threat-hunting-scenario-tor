@@ -3,7 +3,7 @@
 <img width="400" src="https://github.com/user-attachments/assets/44bac428-01bb-4fe9-9d85-96cba7698bee" alt="Tor Logo with the onion and a crosshair on it"/>
 
 # Threat Hunt Report: Unauthorized TOR Usage
-- [Scenario Creation](https://github.com/joshmadakor0/threat-hunting-scenario-tor/blob/main/threat-hunting-scenario-tor-event-creation.md)
+- [Scenario Creation](https://github.com/Emranhossain27/Threat-hunting-folder/blob/main/Script/Threat-Hunt-Event%20-(TOR%20Usage).md)
 
 ## Platforms and Languages Leveraged
 - Windows 10 Virtual Machines (Microsoft Azure)
@@ -13,7 +13,7 @@
 
 ##  Scenario
 
-Management suspects that some employees may be using TOR browsers to bypass network security controls because recent network logs show unusual encrypted traffic patterns and connections to known TOR entry nodes. Additionally, there have been anonymous reports of employees discussing ways to access restricted sites during work hours. The goal is to detect any TOR usage and analyze related security incidents to mitigate potential risks. If any use of TOR is found, notify management.
+Management thinks some employees might be using the TOR browser to get around security controls. This suspicion comes from network logs showing strange encrypted traffic and connections to TOR entry nodes. On top of that, there were anonymous reports about employees talking about visiting restricted sites during work hours. The main goal is to check for TOR activity, review any related security incidents, and take action to reduce risks. If TOR use is confirmed, management should be notified.
 
 ### High-Level TOR-Related IoC Discovery Plan
 
@@ -27,16 +27,16 @@ Management suspects that some employees may be using TOR browsers to bypass netw
 
 ### 1. Searched the `DeviceFileEvents` Table
 
-Searched for any file that had the string "tor" in it and discovered what looks like the user "employee" downloaded a TOR installer, did something that resulted in many TOR-related files being copied to the desktop, and the creation of a file called `tor-shopping-list.txt` on the desktop at `2024-11-08T22:27:19.7259964Z`. These events began at `2024-11-08T22:14:48.6065231Z`.
+Searched the DeviceFileEvents table for any file containing the string “tor” and found that the user “labuser” downloaded a Tor installer at 2025-09-01T15:22:11.0849944Z. This activity resulted in multiple Tor-related files being copied to the Desktop and the creation of a file named “tor-shopping-list.txt.” These events began at:
 
 **Query used to locate events:**
 
 ```kql
 DeviceFileEvents  
-| where DeviceName == "threat-hunt-lab"  
-| where InitiatingProcessAccountName == "employee"  
+| where DeviceName == "windows-hunt-10"  
+| where InitiatingProcessAccountName == "labuser"  
 | where FileName contains "tor"  
-| where Timestamp >= datetime(2024-11-08T22:14:48.6065231Z)  
+| where Timestamp >= datetime(2025-09-01T15:04:33.521034Z)  
 | order by Timestamp desc  
 | project Timestamp, DeviceName, ActionType, FileName, FolderPath, SHA256, Account = InitiatingProcessAccountName
 ```

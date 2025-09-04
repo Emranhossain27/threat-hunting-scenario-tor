@@ -129,19 +129,24 @@ TOR usage was confirmed on endpoint  windows-hunt-10 by the user labuser. The de
 
 ---
 
-
----
-
 ## MITRE ATT&CK Mapping
 
 The following techniques from the MITRE ATT&CK framework align with the observed activity:
-
 T1105 – Ingress Tool Transfer: The user downloaded the Tor Browser installer (tor-browser-windows-x86_64-portable-14.5.6.exe).
-
 T1059 – Command and Scripting Interpreter: The Tor installer and processes (tor.exe, firefox.exe) were executed locally.
-
 T1071.001 – Application Layer Protocol: Web Traffic: The Tor client established encrypted outbound connections over port 9001 to a known Tor entry node.
-
 T1204 – User Execution: The employee intentionally executed the Tor installer and browser.
 
+---
+
+## Recommendations
+
+To reduce risk of unauthorized Tor usage in the environment:
+
+1. Network Controls: Block known Tor ports (9001, 9030, 9050, 9051, 9150) at perimeter firewalls and proxy servers.
+2. File & Process Monitoring: Deploy endpoint monitoring rules to alert on the creation or execution of tor.exe, firefox.exe within unusual directories (e.g., Desktop, Downloads).
+3. Application Whitelisting: Implement AppLocker or similar solutions to prevent execution of unauthorized software.
+4. Policy Enforcement: Update and communicate the Acceptable Use Policy (AUP) to employees, explicitly prohibiting Tor usage.
+5. User Awareness Training: Conduct training on the risks of anonymity networks and consequences of policy violations.
+6. Threat Intelligence Integration: Regularly ingest updated IoCs (e.g., Tor node IPs, hashes) into SIEM for detection
 ---
